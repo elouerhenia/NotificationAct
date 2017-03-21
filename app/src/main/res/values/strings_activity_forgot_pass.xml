@@ -1,5 +1,5 @@
 <resources>
 
-    <string name="action_recover">Recover</string>
+    <string name="action_recover">Récuperer</string>
     <string name="remembered_password">Just remembered it?</string>
 </resources>
