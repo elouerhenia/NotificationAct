@@ -13,12 +13,12 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import utils.CheckNetwork;
-import utils.Constants;
-import utils.ValidateUserInfo;
+import com.rihab.notificationact.utils.CheckNetwork;
+import com.rihab.notificationact.utils.Constants;
+import com.rihab.notificationact.utils.ValidateUserInfo;
 
 /**
- * Created by AndreBTS on 20/08/2015.
+ * Created by Rihab on 21/03/2017.
  */
 public class ForgotPassActivity extends Activity implements View.OnClickListener{
     EditText edit_email;
@@ -52,13 +52,9 @@ public class ForgotPassActivity extends Activity implements View.OnClickListener
         this.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
     }
 
-    /**
-     * Attempts to recover the account specified by the login form.
-     * If there are form errors (invalid email, missing fields, etc.), the
-     * errors are presented and no actual login attempt is made.
-     */
+
     public void attemptRecover() {
-        // Store values at the time of the login attempt.
+
         String email = edit_email.getText().toString();
 
         boolean cancel = false;
@@ -66,7 +62,7 @@ public class ForgotPassActivity extends Activity implements View.OnClickListener
 
         ValidateUserInfo validate = new ValidateUserInfo();
 
-        // Check for a valid email address.
+        // Validité adresse mail.
         if (TextUtils.isEmpty(email)) {
             edit_email.setError(getString(R.string.error_field_required));
             focusView = edit_email;
@@ -78,13 +74,11 @@ public class ForgotPassActivity extends Activity implements View.OnClickListener
         }
 
         if (cancel) {
-            // There was an error; don't attempt login and focus the first
-            // form field with an error.
+
+
             focusView.requestFocus();
         } else {
-            //TODO Recover account logic
-            // Show a progress spinner, and kick off a background task to
-            // perform the user recover info attempt.
+
             mForgotTask = new ForgotPassTask(email);
             mForgotTask.execute((Void) null);
         }
@@ -103,10 +97,6 @@ public class ForgotPassActivity extends Activity implements View.OnClickListener
         }
     }
 
-    /**
-     * Represents an asynchronous login/registration task used to authenticate
-     * the user.
-     */
     public class ForgotPassTask extends AsyncTask<Void, Void, Boolean> {
         private final String mEmail;
 

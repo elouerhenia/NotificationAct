@@ -12,12 +12,12 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import utils.CheckNetwork;
-import utils.Constants;
-import utils.ValidateUserInfo;
+import com.rihab.notificationact.utils.CheckNetwork;
+import com.rihab.notificationact.utils.Constants;
+import com.rihab.notificationact.utils.ValidateUserInfo;
 
 /**
- * Created by AndreBTS on 20/08/2015.
+ * Created by Rihab on 21/03/2017.
  */
 public class RegisterActivity extends Activity implements View.OnClickListener{
     EditText edit_nome, edit_email, edit_password;
@@ -51,13 +51,9 @@ public class RegisterActivity extends Activity implements View.OnClickListener{
         this.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
     }
 
-    /**
-     * Attempts to sign in or register the account specified by the login form.
-     * If there are form errors (invalid email, missing fields, etc.), the
-     * errors are presented and no actual login attempt is made.
-     */
+
     public void attemptCreate() {
-        // Store values at the time of the login attempt.
+
         String name = edit_nome.getText().toString();
         String email = edit_email.getText().toString();
         String password = edit_password.getText().toString();
@@ -67,7 +63,6 @@ public class RegisterActivity extends Activity implements View.OnClickListener{
 
         ValidateUserInfo validate = new ValidateUserInfo();
 
-        // Check for a valid email address.
         if (TextUtils.isEmpty(name)) {
             edit_nome.setError(getString(R.string.error_field_required));
             focusView = edit_nome;
@@ -91,13 +86,12 @@ public class RegisterActivity extends Activity implements View.OnClickListener{
         }
 
         if (cancel) {
-            // There was an error; don't attempt login and focus the first
-            // form field with an error.
+
+
             focusView.requestFocus();
         } else {
-            //TODO Create account logic
-            // Show a progress spinner, and kick off a background task to
-            // perform the user registration attempt.
+
+
             mCreateTask = new CreateUserTask(name, email, password);
             mCreateTask.execute((Void) null);
         }
@@ -116,10 +110,7 @@ public class RegisterActivity extends Activity implements View.OnClickListener{
         }
     }
 
-    /**
-     * Represents an asynchronous login/registration task used to authenticate
-     * the user.
-     */
+
     public class CreateUserTask extends AsyncTask<Void, Void, Boolean> {
         private final String mName;
         private final String mEmail;

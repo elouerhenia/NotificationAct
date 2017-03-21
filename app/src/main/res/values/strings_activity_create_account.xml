@@ -1,7 +1,7 @@
 <resources>
 
     <!-- Strings related to create account -->
-    <string name="already_registered">Already have an account? Sign in</string>
-    <string name="prompt_name">Name</string>
-    <string name="action_register">Register</string>
+    <string name="already_registered">J\'ai déja un compte? Connexion</string>
+    <string name="prompt_name">Nom</string>
+    <string name="action_register">Inscription</string>
 </resources>

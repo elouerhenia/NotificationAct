@@ -1,4 +1,4 @@
-package utils;
+package com.rihab.notificationact.utils;
 
 import android.app.Activity;
 import android.content.Context;
@@ -6,7 +6,7 @@ import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 
 /**
- * Created by AndreBTS on 25/09/2015.
+ * Created by Rihab on 20/03/2017.
  */
 public class CheckNetwork {
 

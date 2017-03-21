@@ -1,10 +1,11 @@
-package utils;
+package com.rihab.notificationact.utils;
 
 /**
- * Created by AndreBTS on 25/09/2015.
+ * Created by Rihab on 20/03/2017.
  */
 public class Constants {
     public static final String TAG_EMAIL = "email";
     public static final String TAG_LOGIN = "login";
+    public static final String BASE_URL = "";
 
 }
