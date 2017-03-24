@@ -1,12 +1,15 @@
-package com.rihab.notificationact;
+package com.rihab.notificationact.views;
 
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
 import android.annotation.TargetApi;
 import android.app.LoaderManager;
 import android.app.ProgressDialog;
+import android.content.BroadcastReceiver;
+import android.content.Context;
 import android.content.CursorLoader;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.content.Loader;
 import android.content.pm.PackageManager;
 import android.database.Cursor;
@@ -17,9 +20,13 @@ import android.os.Bundle;
 import android.provider.ContactsContract;
 import android.support.annotation.NonNull;
 import android.support.design.widget.Snackbar;
+import android.support.v4.content.LocalBroadcastManager;
 import android.support.v7.app.AppCompatActivity;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.KeyEvent;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.WindowManager;
 import android.view.inputmethod.EditorInfo;
@@ -27,23 +34,66 @@ import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
+import com.android.volley.AuthFailureError;
+import com.android.volley.Request;
+import com.android.volley.RequestQueue;
+import com.android.volley.Response;
+import com.android.volley.TimeoutError;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.StringRequest;
+import com.android.volley.toolbox.Volley;
+
+
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
+import com.rihab.notificationact.R;
+import com.rihab.notificationact.utils.CheckNetwork;
+import com.rihab.notificationact.utils.Constants;
+import com.rihab.notificationact.utils.SessionManager;
 import com.rihab.notificationact.utils.Constants;
 import com.rihab.notificationact.utils.ValidateUserInfo;
 
 import static android.Manifest.permission.READ_CONTACTS;
 
 
+/**
+ * Created by Rihab on 20/03/2017.
+ */
+
+
 public class LoginActivity extends AppCompatActivity implements
         View.OnClickListener, LoaderManager.LoaderCallbacks<Cursor> {
+    public String token;
+    private BroadcastReceiver mRegistrationBroadcastReceiver;
 
 
+    SessionManager manager;
+
+    public static final String LOGIN_URL = Constants.BASE_URL+"login.php";
+    private static final String REGISTER_URL = Constants.BASE_URL+"inscription.php";
+
+
+    public static final String KEY_USERNAME="username";
+    public static final String KEY_PASSWORD="password";
+    public static final String KEY_TOKEN = "token";
+    private CreateUserTaskGoogle mCreateTaskGoogle = null;
+
+
+    /**
+     * Id to identity READ_CONTACTS permission request.
+     */
     private static final int REQUEST_READ_CONTACTS = 0;
 
     /**
@@ -74,16 +124,36 @@ public class LoginActivity extends AppCompatActivity implements
     private boolean mShouldResolve = false;
 
 
+    //private SignInButton mPlusSignInButton;
+    private ImageView mPlusSignInButton;
     private Button mEmailSignInButton;
 
     private TextView txt_create, txt_forgot;
+    //private LoginButton facebookLoginButton;
+    private ImageView facebookLoginButton;
 
     ProgressDialog ringProgressDialog;
+    private ProgressDialog pDialog;
+
+
+    private static final int PLAY_SERVICES_RESOLUTION_REQUEST = 9000;
+
+
+
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
+        manager = new SessionManager();
+
+
+        mEmailSignInButton = (Button) findViewById(R.id.email_sign_in_button);
+
+
+
+
 
         initInstances();
     }
@@ -114,13 +184,38 @@ public class LoginActivity extends AppCompatActivity implements
         txt_forgot = (TextView) findViewById(R.id.txt_forgot);
         txt_forgot.setOnClickListener(this);
 
-        mEmailSignInButton = (Button) findViewById(R.id.email_sign_in_button);
+
         mEmailSignInButton.setOnClickListener(this);
+
+        //Google+ Login
+        //mPlusSignInButton = (SignInButton) findViewById(R.id.g_sign_in_button);
+
+        //mPlusSignInButton.setSize(SignInButton.SIZE_WIDE);
+
+
+
+
+
+        // Build a GoogleApiClient with access to the Google Sign-In API and the
+        // options specified by gso.
+
+
+
 
 
 
         this.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
     }
+
+
+
+
+
+
+
+
+
+
 
     private void populateAutoComplete() {
         if (!mayRequestContacts()) {
@@ -131,28 +226,12 @@ public class LoginActivity extends AppCompatActivity implements
     }
 
     private boolean mayRequestContacts() {
-        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.M) {
-            return true;
-        }
-        if (checkSelfPermission(READ_CONTACTS) == PackageManager.PERMISSION_GRANTED) {
-            return true;
-        }
-        if (shouldShowRequestPermissionRationale(READ_CONTACTS)) {
-            Snackbar.make((LinearLayout)findViewById(R.id.ll_main), R.string.permission_rationale, Snackbar.LENGTH_INDEFINITE)
-                    .setAction(android.R.string.ok, new View.OnClickListener() {
-                        @Override
-                        @TargetApi(Build.VERSION_CODES.M)
-                        public void onClick(View v) {
-                            requestPermissions(new String[]{READ_CONTACTS}, REQUEST_READ_CONTACTS);
-                        }
-                    }).show();
-        } else {
-            requestPermissions(new String[]{READ_CONTACTS}, REQUEST_READ_CONTACTS);
-        }
         return false;
     }
 
-
+    /**
+     * Callback received when a permissions request has been completed.
+     */
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions,
                                            @NonNull int[] grantResults) {
@@ -166,6 +245,7 @@ public class LoginActivity extends AppCompatActivity implements
 
     private void attemptLogin() {
         if (mAuthTask != null) {
+
             return;
         }
 
@@ -174,8 +254,14 @@ public class LoginActivity extends AppCompatActivity implements
         mPasswordView.setError(null);
 
         // Store values at the time of the login attempt.
-        String email = mEmailView.getText().toString();
-        String password = mPasswordView.getText().toString();
+        final String name = mEmailView.getText().toString();
+        final String password = mPasswordView.getText().toString();
+
+        final String username = mEmailView.getText().toString().trim();
+        final String passworde = mPasswordView.getText().toString().trim();
+
+
+
 
         boolean cancel = false;
         View focusView = null;
@@ -183,20 +269,13 @@ public class LoginActivity extends AppCompatActivity implements
         ValidateUserInfo validateUserInfo = new ValidateUserInfo();
 
         // Check for a valid password, if the user entered one.
-        if (!TextUtils.isEmpty(password) && !validateUserInfo.isPasswordValid(password)) {
-            mPasswordView.setError(getString(R.string.error_invalid_password));
+        if (TextUtils.isEmpty(name)) {
+            mEmailView.setError("Veuillez saisir votre nom d'utilisateur");
+            focusView = mEmailView;
+            cancel = true;
+        }else if (TextUtils.isEmpty(password)) {
+            mPasswordView.setError("Veuillez saisir votre mot de passe");
             focusView = mPasswordView;
-            cancel = true;
-        }
-
-        // Check for a valid email address.
-        if (TextUtils.isEmpty(email)) {
-            mEmailView.setError(getString(R.string.error_field_required));
-            focusView = mEmailView;
-            cancel = true;
-        } else if (!validateUserInfo.isEmailValid(email)) {
-            mEmailView.setError(getString(R.string.error_invalid_email));
-            focusView = mEmailView;
             cancel = true;
         }
 
@@ -205,11 +284,74 @@ public class LoginActivity extends AppCompatActivity implements
             // form field with an error.
             focusView.requestFocus();
         } else {
-            // Show a progress spinner, and kick off a background task to
-            // perform the user login attempt.
-            showProgress(true);
-            mAuthTask = new UserLoginTask(email, password);
-            mAuthTask.execute((Void) null);
+
+
+            pDialog = new ProgressDialog(LoginActivity.this);
+            // Showing progress dialog before making http request
+            pDialog.setMessage(getResources().getString(R.string.tv_chargement));
+            pDialog.show();
+            StringRequest stringRequest = new StringRequest(Request.Method.POST, LOGIN_URL,
+                    new Response.Listener<String>() {
+                        @Override
+                        public void onResponse(String response) {
+
+                            hidePDialog();
+                            JSONObject root = null;
+                            try {
+                                root = new JSONObject(response);
+                                String test = root.getString("code");
+
+
+                                if(test.equals("200")){
+
+                                    manager.setPreferences(LoginActivity.this, "id", root.getJSONObject("user").getString("idusermobile"));
+                                    manager.setPreferences(LoginActivity.this, "nom", root.getJSONObject("user").getString("username"));
+                                    manager.setPreferences(LoginActivity.this, "password", root.getJSONObject("user").getString("password"));
+                                    manager.setPreferences(LoginActivity.this, "email", root.getJSONObject("user").getString("email"));
+                                    manager.setPreferences(LoginActivity.this, "telephone", root.getJSONObject("user").getString("tel"));
+                                    manager.setPreferences(LoginActivity.this, "type", "native");
+                                    manager.setPreferences(LoginActivity.this, "status", "1");
+
+                                    mEmailView.setText("");
+                                    mPasswordView.setText("");
+
+
+                                    Intent main = new Intent(LoginActivity.this, MainActivity.class);
+                                    startActivity(main);
+
+                                }else Toast.makeText(LoginActivity.this,"Vérifiez vos cordonnées",Toast.LENGTH_LONG).show();
+
+                            } catch (JSONException e) {
+                                e.printStackTrace();
+                            }
+
+
+                        }
+                    }, new Response.ErrorListener() {
+
+                @Override
+                public void onErrorResponse(VolleyError error) {
+
+
+                    Toast.makeText(LoginActivity.this,"Erreur de connexion",Toast.LENGTH_LONG ).show();
+                    hidePDialog();
+
+                }
+            }){
+                @Override
+                protected Map<String, String> getParams() throws AuthFailureError {
+                    Map<String,String> map = new HashMap<String,String>();
+                    map.put(KEY_USERNAME,username);
+                    map.put(KEY_PASSWORD,passworde);
+                    map.put(KEY_TOKEN,token);
+
+                    return map;
+                }
+            };
+
+            RequestQueue requestQueue = Volley.newRequestQueue(this);
+            requestQueue.add(stringRequest);
+
         }
     }
 
@@ -322,7 +464,7 @@ public class LoginActivity extends AppCompatActivity implements
                 Intent intentForgot = new Intent(LoginActivity.this, ForgotPassActivity.class);
                 intentForgot.putExtra(Constants.TAG_EMAIL, email);
                 startActivity(intentForgot);
-                finish();
+                //finish();
                 break;
         }
     }
@@ -332,9 +474,7 @@ public class LoginActivity extends AppCompatActivity implements
 
 
 
-    /**
-     * Fetching user's information name, email, profile pic
-     * */
+
     /**
      * Represents an asynchronous login/registration task used to authenticate
      * the user.
@@ -351,15 +491,6 @@ public class LoginActivity extends AppCompatActivity implements
 
         @Override
         protected Boolean doInBackground(Void... params) {
-            // TODO: attempt authentication against a network service.
-
-            try {
-                // Simulate network access.
-                Thread.sleep(2000);
-            } catch (InterruptedException e) {
-                return false;
-            }
-
             for (String credential : DUMMY_CREDENTIALS) {
                 String[] pieces = credential.split(":");
                 if (pieces[0].equals(mEmail)) {
@@ -368,7 +499,6 @@ public class LoginActivity extends AppCompatActivity implements
                 }
             }
 
-            // TODO: register the new account here.
             return true;
         }
 
@@ -379,7 +509,6 @@ public class LoginActivity extends AppCompatActivity implements
 
             if (success) {
                 startActivity(new Intent(LoginActivity.this, MainActivity.class));
-                finish();
             } else {
                 mPasswordView.setError(getString(R.string.error_incorrect_password));
                 mPasswordView.requestFocus();
@@ -392,6 +521,94 @@ public class LoginActivity extends AppCompatActivity implements
             showProgress(false);
         }
     }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+    }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        // Inflate the menu; this adds items to the action bar if it is present.
+        // getMenuInflater().inflate(R.menu.menu_login, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        // Handle action bar item clicks here. The action bar will
+        // automatically handle clicks on the Home/Up button, so long
+        // as you specify a parent activity in AndroidManifest.xml.
+        int id = item.getItemId();
+
+        //noinspection SimplifiableIfStatement
+        if (id == R.id.action_settings) {
+            return true;
+        }
+
+        return super.onOptionsItemSelected(item);
+    }
+
+
+
+    @Override
+    protected void onActivityResult(int requestCode, int responseCode, Intent intent) {
+        super.onActivityResult(requestCode, responseCode, intent);
+        //Facebook login
+
+    }
+    // [END onActivityResult]
+
+    // [START handleSignInResult]
+
+
+
+
+
+
+
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+    }
+
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        hidePDialog();
+    }
+
+    private void hidePDialog() {
+        if (pDialog != null) {
+            pDialog.dismiss();
+            pDialog = null;
+        }
+    }
+
+
+
+
+
+
+
+
+
+
+
 
 
 }

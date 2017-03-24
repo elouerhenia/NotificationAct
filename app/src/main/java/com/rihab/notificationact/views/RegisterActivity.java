@@ -1,4 +1,4 @@
-package com.rihab.notificationact;
+package com.rihab.notificationact.views;
 
 import android.app.Activity;
 import android.content.Intent;
@@ -12,6 +12,7 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.rihab.notificationact.R;
 import com.rihab.notificationact.utils.CheckNetwork;
 import com.rihab.notificationact.utils.Constants;
 import com.rihab.notificationact.utils.ValidateUserInfo;

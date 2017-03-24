@@ -6,6 +6,8 @@ package com.rihab.notificationact.utils;
 public class Constants {
     public static final String TAG_EMAIL = "email";
     public static final String TAG_LOGIN = "login";
-    public static final String BASE_URL = "";
+    public static final String BASE_URL = "http://www.ecobingo.tn/WS/";
+    //login.php
+    //inscription.php
 
 }
