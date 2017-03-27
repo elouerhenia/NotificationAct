@@ -12,4 +12,6 @@
     <string name="error_field_required">Champs obligatoire</string>
     <string name="forgot_password">Mot de passe oublié?</string>
     <string name="create_account">Inscription</string>
+
+    <string name="valider">valider</string>
 </resources>

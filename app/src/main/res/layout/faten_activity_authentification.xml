@@ -1,0 +1,119 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+xmlns:android="http://schemas.android.com/apk/res/android"
+xmlns:tools="http://schemas.android.com/tools"
+tools:context=".Authentification"
+android:layout_width="match_parent"
+android:layout_height="match_parent"
+android:orientation="vertical">
+
+<RelativeLayout
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:layout_centerInParent="true"
+    android:gravity="center_vertical">
+    <ImageView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/iconBlanc"
+        android:textColor="@color/app_primary"
+        android:layout_centerHorizontal="true"
+        android:src="@drawable/appicon1"
+    />
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="50dp"
+        android:id="@+id/chentayeb"
+        android:textColor="@color/app_primary"
+        android:text="@string/app_name"
+        android:layout_centerHorizontal="true"
+        android:layout_below="@+id/iconBlanc"
+        android:textSize="10pt"
+    />
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/tvSeconcterMail"
+        android:textColor="@color/white"
+        android:text="@string/action_sign_in"
+        android:layout_centerHorizontal="true"
+        android:layout_below="@+id/chentayeb"
+    />
+
+    <EditText
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:inputType="textPersonName"
+        android:hint="@string/prompt_email"
+        android:id="@+id/login"
+        android:textColorHint="@color/app_primary"
+        android:drawableRight="@drawable/username"
+        android:background="@drawable/roungle"
+        android:layout_below="@+id/tvSeconcterMail"
+        android:layout_centerHorizontal="true"
+        android:layout_marginBottom="10px"
+        android:layout_marginLeft="20dp"
+        android:layout_marginRight="20dp"
+        android:paddingLeft="30px"
+        android:paddingRight="30px"
+        android:textColor="@color/app_primary"/>
+
+    <EditText
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:inputType="textPassword"
+        android:drawableRight="@drawable/password"
+        android:hint="@string/prompt_password"
+        android:id="@+id/password"
+        android:layout_below="@+id/login"
+        android:textColorHint="@color/app_primary"
+        android:background="@drawable/roungle"
+        android:layout_centerHorizontal="true"
+        android:layout_marginBottom="10px"
+        android:layout_marginLeft="20dp"
+        android:layout_marginRight="20dp"
+        android:paddingLeft="30px"
+        android:paddingRight="30px"
+        android:textColor="@color/app_primary"/>
+
+    <Button
+        android:layout_width="150dp"
+        android:layout_height="50dp"
+        android:text="@string/valider"
+        android:id="@+id/cnx"
+        android:layout_gravity="left"
+        android:textColor="@color/app_primary"
+        android:layout_below="@+id/password"
+        android:background="@drawable/roungle"
+        android:textSize="5pt"
+        android:textStyle="bold"
+        android:layout_margin="20px"
+        android:layout_alignLeft="@+id/password"
+        android:onClick="seConnecter"
+    />
+    <Button
+        android:layout_width="150dp"
+        android:layout_height="50dp"
+        android:text="@string/create_account"
+        android:id="@+id/annuler_cnx"
+        android:layout_gravity="right"
+        android:textColor="@color/white"
+        android:layout_below="@+id/password"
+        android:background="@drawable/roungle2"
+        android:layout_margin="20px"
+        android:layout_marginLeft="50px"
+        android:textSize="5pt"
+        android:layout_alignRight="@+id/password"
+        android:onClick="annulerCnx"/>
+
+
+
+
+
+</RelativeLayout>
+
+
+
+</LinearLayout>
+
+

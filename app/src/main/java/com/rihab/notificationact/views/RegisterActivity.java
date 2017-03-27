@@ -14,7 +14,7 @@ import android.widget.Toast;
 
 import com.rihab.notificationact.R;
 import com.rihab.notificationact.utils.CheckNetwork;
-import com.rihab.notificationact.utils.Constants;
+import com.rihab.notificationact.utils.EndPoints;
 import com.rihab.notificationact.utils.ValidateUserInfo;
 
 /**
@@ -34,9 +34,9 @@ public class RegisterActivity extends Activity implements View.OnClickListener{
         String email;
         if (savedInstanceState == null) {
             Bundle extras = getIntent().getExtras();
-            email = extras == null ? "" : extras.getString(Constants.TAG_EMAIL);
+            email = extras == null ? "" : extras.getString(EndPoints.TAG_EMAIL);
         } else {
-            email = savedInstanceState.getString(Constants.TAG_EMAIL);
+            email = savedInstanceState.getString(EndPoints.TAG_EMAIL);
         }
 
         edit_nome = (EditText) findViewById(R.id.edit_nome);

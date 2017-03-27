@@ -6,10 +6,8 @@ import android.annotation.TargetApi;
 import android.app.LoaderManager;
 import android.app.ProgressDialog;
 import android.content.BroadcastReceiver;
-import android.content.Context;
 import android.content.CursorLoader;
 import android.content.Intent;
-import android.content.IntentFilter;
 import android.content.Loader;
 import android.content.pm.PackageManager;
 import android.database.Cursor;
@@ -19,11 +17,8 @@ import android.os.Build;
 import android.os.Bundle;
 import android.provider.ContactsContract;
 import android.support.annotation.NonNull;
-import android.support.design.widget.Snackbar;
-import android.support.v4.content.LocalBroadcastManager;
 import android.support.v7.app.AppCompatActivity;
 import android.text.TextUtils;
-import android.util.Log;
 import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -35,7 +30,6 @@ import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -43,7 +37,6 @@ import com.android.volley.AuthFailureError;
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
-import com.android.volley.TimeoutError;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
@@ -53,19 +46,14 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 import com.rihab.notificationact.R;
-import com.rihab.notificationact.utils.CheckNetwork;
-import com.rihab.notificationact.utils.Constants;
+import com.rihab.notificationact.utils.EndPoints;
 import com.rihab.notificationact.utils.SessionManager;
-import com.rihab.notificationact.utils.Constants;
 import com.rihab.notificationact.utils.ValidateUserInfo;
-
-import static android.Manifest.permission.READ_CONTACTS;
 
 
 /**
@@ -81,14 +69,13 @@ public class LoginActivity extends AppCompatActivity implements
 
     SessionManager manager;
 
-    public static final String LOGIN_URL = Constants.BASE_URL+"login.php";
-    private static final String REGISTER_URL = Constants.BASE_URL+"inscription.php";
+    public static final String LOGIN_URL = EndPoints.BASE_URL+"login.php";
+    private static final String REGISTER_URL = EndPoints.BASE_URL+"inscription.php";
 
 
     public static final String KEY_USERNAME="username";
     public static final String KEY_PASSWORD="password";
     public static final String KEY_TOKEN = "token";
-    private CreateUserTaskGoogle mCreateTaskGoogle = null;
 
 
     /**
@@ -456,13 +443,13 @@ public class LoginActivity extends AppCompatActivity implements
                 break;
             case R.id.txt_create:
                 Intent intent = new Intent(LoginActivity.this, RegisterActivity.class);
-                intent.putExtra(Constants.TAG_EMAIL, email);
+                intent.putExtra(EndPoints.TAG_EMAIL, email);
                 startActivity(intent);
                 finish();
                 break;
             case R.id.txt_forgot:
                 Intent intentForgot = new Intent(LoginActivity.this, ForgotPassActivity.class);
-                intentForgot.putExtra(Constants.TAG_EMAIL, email);
+                intentForgot.putExtra(EndPoints.TAG_EMAIL, email);
                 startActivity(intentForgot);
                 //finish();
                 break;

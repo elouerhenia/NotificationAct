@@ -20,6 +20,7 @@
     <color name="top_item">#a6c</color>
     <color name="sticky_item">#45645C</color>
     <color name="sticky_item_text">#fff</color>
+    <color name="white">#fff</color>
 
     <integer-array name="androidcolors">
         <item>@color/blue</item>
