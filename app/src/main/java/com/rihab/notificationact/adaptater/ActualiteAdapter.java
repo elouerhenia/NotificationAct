@@ -1,4 +1,4 @@
-package com.rihab.notificationact;
+package com.rihab.notificationact.adaptater;
 
 import android.content.Context;
 import android.graphics.Color;
@@ -10,6 +10,7 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.android.volley.RequestQueue;
+import com.rihab.notificationact.R;
 import com.rihab.notificationact.model.ActualiteModel;
 
 import java.util.List;
@@ -52,7 +53,7 @@ public class ActualiteAdapter extends RecyclerView.Adapter<ActualiteAdapter.View
 	@Override
 	public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
 		View itemView = LayoutInflater.from(parent.getContext())
-				.inflate(R.layout.faten_item_actu, parent, false);
+				.inflate(R.layout.item_actu, parent, false);
 
 		return new ViewHolder(itemView);
 	}

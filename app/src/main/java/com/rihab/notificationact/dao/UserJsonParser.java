@@ -1,4 +1,4 @@
-package com.rihab.notificationact;
+package com.rihab.notificationact.dao;
 
 import com.rihab.notificationact.model.UserModel;
 

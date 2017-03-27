@@ -1,4 +1,4 @@
-package com.rihab.notificationact;
+package com.rihab.notificationact.model;
 
 import android.os.AsyncTask;
 import android.util.Log;
@@ -48,7 +48,7 @@ public interface TaskFinishedListener {
 
 	private void downloadResources() {
 		// We are just imitating some process thats takes a bit of time (loading of resources / downloading)
-		int count = 10;
+		int count = 3;
 		for (int i = 0; i < count; i++) {
 
 			// Update the progress bar after every step

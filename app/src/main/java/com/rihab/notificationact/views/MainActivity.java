@@ -20,6 +20,7 @@ import com.rihab.notificationact.fragments.AddActFragment;
 import com.rihab.notificationact.fragments.MessagerieFragment;
 import com.rihab.notificationact.fragments.NotificationFragment;
 import com.rihab.notificationact.fragments.ProfilFragment;
+import com.rihab.notificationact.fragments.TaskFragment;
 
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
@@ -102,22 +103,22 @@ public class MainActivity extends AppCompatActivity
         // Navigation entre fragment.
         int id = item.getItemId();
 
-        if (id == R.id.nav_camara) {
-            // Handle the camera action
+        if (id == R.id.nav_act) {
             selectFragment(0);
-        } else if (id == R.id.nav_gallery) {
+
+        } else if (id == R.id.nav_task) {
             selectFragment(1);
 
-        } else if (id == R.id.nav_slideshow) {
+        } else if (id == R.id.nav_notif) {
             selectFragment(2);
 
-        } else if (id == R.id.nav_manage) {
+        } else if (id == R.id.nav_msg) {
             selectFragment(3);
 
-        } else if (id == R.id.nav_share) {
+        } else if (id == R.id.nav_parametre_notif) {
             selectFragment(4);
 
-        } else if (id == R.id.nav_send) {
+        } else if (id == R.id.nav_deconnect) {
             selectFragment(5);
 
         }
@@ -142,21 +143,30 @@ public class MainActivity extends AppCompatActivity
                 ActFragment actfragment = ActFragment.newInstance();
                 getSupportFragmentManager().beginTransaction().replace(R.id.main_fragment, actfragment).commit();
                 break;
+
             case 1:
+                //mTitleTextView.setText("Liste");
+                clearSelection();
+                //btn_list_cgc.setSelected(true);
+                TaskFragment taskfragment = TaskFragment.newInstance();
+                getSupportFragmentManager().beginTransaction().replace(R.id.main_fragment, taskfragment).commit();
+                break;
+
+            case 2:
                 //mTitleTextView.setText("Liste");
                 clearSelection();
                 //btn_list_cgc.setSelected(true);
                 NotificationFragment notiffragment = NotificationFragment.newInstance();
                 getSupportFragmentManager().beginTransaction().replace(R.id.main_fragment, notiffragment).commit();
                 break;
-            case 2:
+            case 3:
                 //mTitleTextView.setText("Qr code");
                 clearSelection();
                 //btn_qr_code.setSelected(true);
                 MessagerieFragment msgfragment = MessagerieFragment.newInstance();
                 getSupportFragmentManager().beginTransaction().replace(R.id.main_fragment, msgfragment).commit();
                 break;
-            case 3:
+           /* case 3:
                 //mTitleTextView.setText("Actualités");
                 clearSelection();
                 //btn_news.setSelected(true);
@@ -170,6 +180,8 @@ public class MainActivity extends AppCompatActivity
                 ProfilFragment batteryfragment = ProfilFragment.newInstance();
                 getSupportFragmentManager().beginTransaction().replace(R.id.main_fragment, batteryfragment).commit();
                 break;
+
+                */
         }
 
 

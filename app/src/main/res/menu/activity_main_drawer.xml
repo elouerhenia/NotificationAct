@@ -4,29 +4,29 @@
     <group android:checkableBehavior="single">
 
         <item  android:checked="true"
-            android:id="@+id/nav_camara"
+            android:id="@+id/nav_act"
             android:icon="@android:drawable/ic_menu_camera"
-            android:title="Profile" />
-
-        <item android:id="@+id/nav_gallery"
-            android:icon="@android:drawable/ic_menu_gallery"
             android:title="Actualité" />
 
-        <item android:id="@+id/nav_slideshow"
+        <item android:id="@+id/nav_task"
+            android:icon="@android:drawable/ic_menu_gallery"
+            android:title="Task" />
+
+        <item android:id="@+id/nav_notif"
             android:icon="@android:drawable/ic_menu_slideshow"
             android:title="Notification" />
 
-        <item android:id="@+id/nav_manage"
+        <item android:id="@+id/nav_msg"
             android:icon="@android:drawable/ic_menu_manage"
             android:title="Messagerie" />
     </group>
 
     <item android:title="Paramètre ">
         <menu>
-            <item android:id="@+id/nav_share"
+            <item android:id="@+id/nav_parametre_notif"
                 android:icon="@android:drawable/ic_menu_share"
                 android:title="Niveau de notification" />
-            <item android:id="@+id/nav_send"
+            <item android:id="@+id/nav_deconnect"
                 android:icon="@android:drawable/ic_menu_send"
                 android:title="Deconnexion" />
         </menu>

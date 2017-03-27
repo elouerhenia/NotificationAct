@@ -1,4 +1,4 @@
-package com.rihab.notificationact;
+package com.rihab.notificationact.views;
 
 import android.app.ActionBar;
 import android.content.Context;
@@ -20,10 +20,11 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
+import com.rihab.notificationact.R;
+import com.rihab.notificationact.dao.UserJsonParser;
 import com.rihab.notificationact.model.UserModel;
 import com.rihab.notificationact.utils.EndPoints;
 import com.rihab.notificationact.utils.SessionManager;
-import com.rihab.notificationact.views.MainActivity;
 
 import java.util.HashMap;
 import java.util.List;
@@ -49,7 +50,7 @@ public class Authentification extends AppCompatActivity {
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		setContentView(R.layout.faten_activity_authentification);
+		setContentView(R.layout.activity_authentification);
 
 		login = (EditText) findViewById(R.id.login);
 		password = (EditText) findViewById(R.id.password);
@@ -119,7 +120,7 @@ public class Authentification extends AppCompatActivity {
 							String ch_typeUser = user.getTypeUser();
 
 							if (ch_typeUser.equals("étudiant")) {
-								Intent i = new Intent(getApplicationContext(),Actu_etudiant.class);
+								Intent i = new Intent(getApplicationContext(),MainActivity.class);
 								startActivity(i);
 							}
 							else if (ch_typeUser.equals("enseignant")) {

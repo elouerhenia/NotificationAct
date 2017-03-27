@@ -6,7 +6,9 @@ import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.widget.ProgressBar;
 
+import com.rihab.notificationact.model.Task;
 import com.rihab.notificationact.utils.SessionManager;
+import com.rihab.notificationact.views.Authentification;
 import com.rihab.notificationact.views.MainActivity;
 
 
@@ -15,7 +17,7 @@ public class Splash extends AppCompatActivity implements Task.TaskFinishedListen
 		@Override
 		protected void onCreate(Bundle savedInstanceState) {
 			super.onCreate(savedInstanceState);
-			setContentView(R.layout.faten_activity_splash);
+			setContentView(R.layout.activity_splash);
 			manager=new SessionManager();
 			// Find the progress bar
 			ProgressBar progressBar = (ProgressBar) findViewById(R.id.activity_splash_progress_bar);
@@ -41,7 +43,7 @@ public class Splash extends AppCompatActivity implements Task.TaskFinishedListen
 		Log.d("status", status);
 		if (status.equals("1")){
 			if (ch_type.equals("étudiant")) {
-				Intent i = new Intent(getApplicationContext(),Actu_etudiant.class);
+				Intent i = new Intent(getApplicationContext(),MainActivity.class);
 				startActivity(i);
 			}
 			else if (ch_type.equals("enseignant")) {
